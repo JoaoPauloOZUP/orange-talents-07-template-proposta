@@ -11,7 +11,7 @@ import javax.validation.ReportAsSingleViolation;
 import java.lang.annotation.*;
 
 // De acordo com a documentação do hibernate, validações compostas
-// çao combinadas por meio de AND lógico. Desta maneira abaixo o hibernate permite mudar para OR
+// são combinadas por meio de AND lógico. Desta maneira abaixo o hibernate permite mudar para OR
 @ConstraintComposition(CompositionType.OR)
 @ReportAsSingleViolation
 @CPF
