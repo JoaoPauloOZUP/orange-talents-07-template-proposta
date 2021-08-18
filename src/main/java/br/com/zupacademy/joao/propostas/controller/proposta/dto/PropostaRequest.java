@@ -42,4 +42,8 @@ public class PropostaRequest {
     public Proposta toProposta() {
         return new Proposta(documento, email, nome, new Endereco(rua, numero,  bairro), salario);
     }
+
+    public String getDocumento() {
+        return documento;
+    }
 }

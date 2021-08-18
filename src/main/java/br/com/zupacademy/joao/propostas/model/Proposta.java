@@ -12,6 +12,7 @@ public class Proposta {
     private Long id;
 
     @NotNull @CPFOuCNPJ
+    @Column(unique = true)
     private String documento;
 
     @NotBlank

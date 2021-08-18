@@ -1,4 +1,4 @@
-package br.com.zupacademy.joao.propostas.config.excetionhandler;
+package br.com.zupacademy.joao.propostas.config.exceptionhandler;
 
 public class ErroResponse {
 
