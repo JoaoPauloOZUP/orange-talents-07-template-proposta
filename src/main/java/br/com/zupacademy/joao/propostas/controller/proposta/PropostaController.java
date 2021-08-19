@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,6 +34,9 @@ public class PropostaController {
     @Autowired
     private AvaliacaoFinaneiraClient client;
 
+    @Autowired
+    private TransactionTemplate transaction;
+
     @PostMapping("/proposta")
     private ResponseEntity<?> cadastrarProposta(@Valid @RequestBody PropostaRequest request, UriComponentsBuilder builder) {
         Optional<Proposta> possivelProposta = repository.findByDocumento(request.getDocumento());
@@ -46,13 +50,21 @@ public class PropostaController {
         }
 
         Proposta proposta = request.toProposta();
-        repository.save(proposta);
+        transaction.execute(status -> repository.save(proposta));
         logger.info("Proposta criada: proposta={}, salario={}", proposta.getNomeProposta(), proposta.getSalario());
 
-        AvaliacaoFinanceiraResponse response = client.avalia(new AvaliacaoFinanceiraRequest(proposta));
+        try {
+            AvaliacaoFinanceiraResponse response = client.avalia(new AvaliacaoFinanceiraRequest(proposta));
+            proposta.atualizarEstadoDaAvaliacao(response);
+        } catch (FeignException.FeignClientException exception) {
+            logger.error("Erro na comunicação com API externa. ERRO={}, STATUS={}", exception.getMessage(), exception.status());
 
-        proposta.atualizarEstadoDaAvaliacao(response);
-        repository.save(proposta);
+            throw new ApiErroException(HttpStatus.UNPROCESSABLE_ENTITY, "Algo deu errado. Tente novamente mais tarde");
+        }
+
+        // Na main, o contexto de transação defautlt ativado pelo o repository do JPA está desativado.
+        // Desta maneira, abro uma conexão com BD toda vez que preciso e não seguro uma conexão por método
+        transaction.execute(status -> repository.save(proposta));
 
         URI uri = builder.path("/proposta/{id}").buildAndExpand(proposta.getId()).toUri();
 

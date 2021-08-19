@@ -1,4 +1,4 @@
-package br.com.zupacademy.joao.propostas.config.exceptionhandler;
+package br.com.zupacademy.joao.propostas.config.exceptionhandler.dto;
 
 import java.util.Collection;
 

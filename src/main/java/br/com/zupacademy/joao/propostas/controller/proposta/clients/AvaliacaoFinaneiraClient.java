@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.*;
 public interface AvaliacaoFinaneiraClient {
 
     @PostMapping
-    AvaliacaoFinanceiraResponse avalia(@RequestBody AvaliacaoFinanceiraRequest request);
+    AvaliacaoFinanceiraResponse avalia(AvaliacaoFinanceiraRequest request);
 }
