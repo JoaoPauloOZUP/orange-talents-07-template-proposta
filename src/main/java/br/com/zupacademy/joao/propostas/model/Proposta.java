@@ -1,5 +1,9 @@
 package br.com.zupacademy.joao.propostas.model;
 
+import br.com.zupacademy.joao.propostas.clients.AvaliacaoFinaneiraClient;
+import br.com.zupacademy.joao.propostas.clients.dto.AvaliacaoFinanceiraRequest;
+import br.com.zupacademy.joao.propostas.clients.dto.AvaliacaoFinanceiraResponse;
+import br.com.zupacademy.joao.propostas.controller.proposta.utils.EstadoAvaliacao;
 import br.com.zupacademy.joao.propostas.validator.documento.CPFOuCNPJ;
 
 import javax.persistence.*;
@@ -39,6 +43,10 @@ public class Proposta {
     @PositiveOrZero @NotNull
     private Double salario;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private EstadoAvaliacao estadoAvaliacao = EstadoAvaliacao.EM_ANALISE;
+
     /**
      * @deprecated construtor padrão para o hibernate
      * */
@@ -64,11 +72,19 @@ public class Proposta {
         return id;
     }
 
+    public String getDocumento() {
+        return documento;
+    }
+
     public String getNomeProposta(){
         return nomeProposta;
     }
 
     public Double getSalario() {
         return salario;
+    }
+
+    public void alterarEstadoAvaliacaoFinanceira(AvaliacaoFinanceiraResponse response) {
+        this.estadoAvaliacao = response.getResultadoSolicitacao();
     }
 }

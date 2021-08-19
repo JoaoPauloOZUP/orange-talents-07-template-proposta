@@ -1,5 +1,9 @@
 package br.com.zupacademy.joao.propostas.controller.proposta.dto;
 
+import br.com.zupacademy.joao.propostas.clients.AvaliacaoFinaneiraClient;
+import br.com.zupacademy.joao.propostas.clients.dto.AvaliacaoFinanceiraRequest;
+import br.com.zupacademy.joao.propostas.clients.dto.AvaliacaoFinanceiraResponse;
+import br.com.zupacademy.joao.propostas.controller.proposta.utils.EstadoAvaliacao;
 import br.com.zupacademy.joao.propostas.model.Endereco;
 import br.com.zupacademy.joao.propostas.model.Proposta;
 import br.com.zupacademy.joao.propostas.validator.documento.CPFOuCNPJ;

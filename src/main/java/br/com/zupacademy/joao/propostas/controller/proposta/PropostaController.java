@@ -1,7 +1,9 @@
 package br.com.zupacademy.joao.propostas.controller.proposta;
 
+import br.com.zupacademy.joao.propostas.clients.AvaliacaoFinaneiraClient;
+import br.com.zupacademy.joao.propostas.clients.dto.AvaliacaoFinanceiraRequest;
+import br.com.zupacademy.joao.propostas.clients.dto.AvaliacaoFinanceiraResponse;
 import br.com.zupacademy.joao.propostas.config.exception.ApiErroException;
-import br.com.zupacademy.joao.propostas.config.exceptionhandler.ErroResponse;
 import br.com.zupacademy.joao.propostas.controller.proposta.dto.PropostaRequest;
 import br.com.zupacademy.joao.propostas.model.Proposta;
 import br.com.zupacademy.joao.propostas.repository.PropostaRepository;
@@ -27,13 +29,17 @@ public class PropostaController {
     @Autowired
     private PropostaRepository repository;
 
+    @Autowired
+    private AvaliacaoFinaneiraClient client;
+
     @PostMapping("/proposta")
     private ResponseEntity<?> cadastrarProposta(@Valid @RequestBody PropostaRequest request, UriComponentsBuilder builder) {
         Optional<Proposta> possivelProposta = repository.findByDocumento(request.getDocumento());
+
         if(possivelProposta.isPresent()) {
             logger.info("Proposta existente para documento={}", request.getDocumento());
 
-            // O motivo desta imagem é pelo o fato de não expressar que um documento está incorreto.
+            // O motivo desta mensagem é pelo o fato de não expressar que um documento está incorreto.
             // Isso poderia motiva um hacker a fazer tentativas e erros constantes!
             throw new ApiErroException(HttpStatus.UNPROCESSABLE_ENTITY, "Proposta não cadastrada");
         }
@@ -41,6 +47,9 @@ public class PropostaController {
         Proposta proposta = request.toProposta();
         repository.save(proposta);
         logger.info("Proposta criada: proposta={}, salario={}", proposta.getNomeProposta(), proposta.getSalario());
+
+        AvaliacaoFinanceiraResponse response = client.avalia(new AvaliacaoFinanceiraRequest(proposta));
+        proposta.alterarEstadoAvaliacaoFinanceira(response);
 
         URI uri = builder.path("/proposta/{id}").buildAndExpand(proposta.getId()).toUri();
 
