@@ -1,7 +1,7 @@
-package br.com.zupacademy.joao.propostas.clients;
+package br.com.zupacademy.joao.propostas.controller.proposta.clients;
 
-import br.com.zupacademy.joao.propostas.clients.dto.AvaliacaoFinanceiraRequest;
-import br.com.zupacademy.joao.propostas.clients.dto.AvaliacaoFinanceiraResponse;
+import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.AvaliacaoFinanceiraRequest;
+import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.AvaliacaoFinanceiraResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 

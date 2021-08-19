@@ -1,6 +1,7 @@
 package br.com.zupacademy.joao.propostas.config.exceptionhandler;
 
 import br.com.zupacademy.joao.propostas.config.exception.ApiErroException;
+import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
 
 @RestControllerAdvice
 public class ExceptionValidationHandler {
@@ -44,5 +44,14 @@ public class ExceptionValidationHandler {
         ErroPadronizado erroPadronizado = new ErroPadronizado(mensagens);
 
         return ResponseEntity.status(apiErroException.getHttpStatus()).body(erroPadronizado);
+    }
+
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<?> handleFeingException(FeignException feignException) {
+        Collection<String> mensagens = new ArrayList<>();
+        mensagens.add(feignException.getMessage());
+        ErroPadronizado erroPadronizado = new ErroPadronizado(mensagens);
+
+        return ResponseEntity.status(feignException.status()).body(erroPadronizado);
     }
 }

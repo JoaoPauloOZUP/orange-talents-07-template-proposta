@@ -1,4 +1,4 @@
-package br.com.zupacademy.joao.propostas.clients.dto;
+package br.com.zupacademy.joao.propostas.controller.proposta.clients.dto;
 
 import br.com.zupacademy.joao.propostas.controller.proposta.utils.EstadoAvaliacao;
 import br.com.zupacademy.joao.propostas.controller.proposta.utils.EstadoSolicitacao;

@@ -1,8 +1,8 @@
 package br.com.zupacademy.joao.propostas.model;
 
-import br.com.zupacademy.joao.propostas.clients.AvaliacaoFinaneiraClient;
-import br.com.zupacademy.joao.propostas.clients.dto.AvaliacaoFinanceiraRequest;
-import br.com.zupacademy.joao.propostas.clients.dto.AvaliacaoFinanceiraResponse;
+import br.com.zupacademy.joao.propostas.controller.proposta.clients.AvaliacaoFinaneiraClient;
+import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.AvaliacaoFinanceiraRequest;
+import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.AvaliacaoFinanceiraResponse;
 import br.com.zupacademy.joao.propostas.controller.proposta.utils.EstadoAvaliacao;
 import br.com.zupacademy.joao.propostas.validator.documento.CPFOuCNPJ;
 
@@ -45,7 +45,7 @@ public class Proposta {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private EstadoAvaliacao estadoAvaliacao = EstadoAvaliacao.EM_ANALISE;
+    private EstadoAvaliacao estadoAvaliacao = EstadoAvaliacao.NAO_ELEGIVEL;
 
     /**
      * @deprecated construtor padrão para o hibernate
@@ -84,7 +84,7 @@ public class Proposta {
         return salario;
     }
 
-    public void alterarEstadoAvaliacaoFinanceira(AvaliacaoFinanceiraResponse response) {
+    public void atualizarEstadoDaAvaliacao(AvaliacaoFinanceiraResponse response) {
         this.estadoAvaliacao = response.getResultadoSolicitacao();
     }
 }

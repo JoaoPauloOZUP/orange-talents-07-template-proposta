@@ -1,12 +1,13 @@
 package br.com.zupacademy.joao.propostas.controller.proposta;
 
-import br.com.zupacademy.joao.propostas.clients.AvaliacaoFinaneiraClient;
-import br.com.zupacademy.joao.propostas.clients.dto.AvaliacaoFinanceiraRequest;
-import br.com.zupacademy.joao.propostas.clients.dto.AvaliacaoFinanceiraResponse;
+import br.com.zupacademy.joao.propostas.controller.proposta.clients.AvaliacaoFinaneiraClient;
 import br.com.zupacademy.joao.propostas.config.exception.ApiErroException;
+import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.AvaliacaoFinanceiraRequest;
+import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.AvaliacaoFinanceiraResponse;
 import br.com.zupacademy.joao.propostas.controller.proposta.dto.PropostaRequest;
 import br.com.zupacademy.joao.propostas.model.Proposta;
 import br.com.zupacademy.joao.propostas.repository.PropostaRepository;
+import feign.FeignException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,9 @@ public class PropostaController {
         logger.info("Proposta criada: proposta={}, salario={}", proposta.getNomeProposta(), proposta.getSalario());
 
         AvaliacaoFinanceiraResponse response = client.avalia(new AvaliacaoFinanceiraRequest(proposta));
-        proposta.alterarEstadoAvaliacaoFinanceira(response);
+
+        proposta.atualizarEstadoDaAvaliacao(response);
+        repository.save(proposta);
 
         URI uri = builder.path("/proposta/{id}").buildAndExpand(proposta.getId()).toUri();
 
