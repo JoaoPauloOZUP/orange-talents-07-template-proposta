@@ -110,4 +110,8 @@ public class Proposta {
     public Double getSalario() {
         return salario;
     }
+
+    public EstadoAvaliacao getEstadoAvaliacao() {
+        return estadoAvaliacao;
+    }
 }

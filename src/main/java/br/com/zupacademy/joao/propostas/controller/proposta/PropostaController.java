@@ -7,6 +7,7 @@ import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.avaliaca
 import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.avaliacaofinanceira.AvaliacaoFinanceiraResponse;
 import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.cartao.CartaoResponse;
 import br.com.zupacademy.joao.propostas.controller.proposta.dto.PropostaRequest;
+import br.com.zupacademy.joao.propostas.controller.proposta.dto.PropostaResponse;
 import br.com.zupacademy.joao.propostas.model.Proposta;
 import br.com.zupacademy.joao.propostas.repository.PropostaRepository;
 import feign.FeignException;
@@ -74,5 +75,16 @@ public class PropostaController {
         URI uri = builder.path("/proposta/{id}").buildAndExpand(proposta.getId()).toUri();
 
         return ResponseEntity.created(uri).build();
+    }
+
+    @GetMapping("proposta/{id}")
+    public ResponseEntity<?> obterProposta(@PathVariable("id") Long idProposta) {
+        Optional<Proposta> possivelProposta = repository.findById(idProposta);
+
+        if(possivelProposta.isPresent()) {
+            return ResponseEntity.ok(new PropostaResponse(possivelProposta.get()));
+        }
+
+        return ResponseEntity.notFound().build();
     }
 }
