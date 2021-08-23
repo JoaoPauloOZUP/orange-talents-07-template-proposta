@@ -2,7 +2,7 @@ package br.com.zupacademy.joao.propostas.controller.proposta.service;
 
 import br.com.zupacademy.joao.propostas.controller.proposta.PropostaController;
 import br.com.zupacademy.joao.propostas.controller.proposta.clients.CartaoClient;
-import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.avaliacaofinanceira.AvaliacaoFinanceiraRequest;
+import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.cartao.CartaoRequest;
 import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.cartao.CartaoResponse;
 import br.com.zupacademy.joao.propostas.model.Cartao;
 import br.com.zupacademy.joao.propostas.model.Proposta;
@@ -41,7 +41,7 @@ public class AtrelaCartaoNaPropostaSchedule {
         if(possiveisPropostas.size() != 0) {
             possiveisPropostas.forEach(proposta -> {
                 try {
-                    CartaoResponse response = clientCartao.obterCartao(new AvaliacaoFinanceiraRequest(proposta));
+                    CartaoResponse response = clientCartao.obterCartao(new CartaoRequest(proposta));
                     Cartao cartao = response.toCartao(repository);
                     proposta.incluirCartao(cartao);
                     try {
