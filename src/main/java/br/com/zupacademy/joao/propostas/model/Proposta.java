@@ -1,9 +1,9 @@
 package br.com.zupacademy.joao.propostas.model;
 
-import br.com.zupacademy.joao.propostas.controller.proposta.clients.AvaliacaoFinaneiraClient;
-import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.AvaliacaoFinanceiraRequest;
-import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.AvaliacaoFinanceiraResponse;
+import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.avaliacaofinanceira.AvaliacaoFinanceiraResponse;
+import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.cartao.CartaoResponse;
 import br.com.zupacademy.joao.propostas.controller.proposta.utils.EstadoAvaliacao;
+import br.com.zupacademy.joao.propostas.controller.proposta.utils.EstadoCartao;
 import br.com.zupacademy.joao.propostas.validator.documento.CPFOuCNPJ;
 
 import javax.persistence.*;
@@ -26,7 +26,7 @@ public class Proposta {
 
     @NotBlank
     @NotNull
-    private String nomeProposta;
+    private String nome;
 
     // Para não criar uma string somente com rua, bairro e número,
     // o @Embedded permite eu criar um objeto para tratar isso e o Hibernate mapeia
@@ -47,6 +47,12 @@ public class Proposta {
     @Enumerated(EnumType.STRING)
     private EstadoAvaliacao estadoAvaliacao = EstadoAvaliacao.NAO_ELEGIVEL;
 
+    @Enumerated(EnumType.STRING)
+    private EstadoCartao estadoCartao;
+
+    @OneToOne(cascade = CascadeType.MERGE)
+    private Cartao cartao;
+
     /**
      * @deprecated construtor padrão para o hibernate
      * */
@@ -55,15 +61,36 @@ public class Proposta {
 
     public Proposta(@NotNull String documento,
                     @NotBlank @Email String email,
-                    @NotBlank String nomeProposta,
+                    @NotBlank String nome,
                     @NotNull Endereco edereco,
                     @Positive @NotNull Double salario) {
 
         this.documento = documento;
         this.email = email;
-        this.nomeProposta = nomeProposta;
+        this.nome = nome;
         this.endereco = edereco;
         this.salario = salario;
+    }
+
+    public void atualizarEstadoDaAvaliacao(AvaliacaoFinanceiraResponse response) {
+        this.estadoAvaliacao = response.getResultadoSolicitacao();
+
+        if(isElegivel()) {
+            this.estadoCartao = EstadoCartao.AGUARDANDO_CARTAO;
+        }
+    }
+
+    public boolean isElegivel() {
+        return estadoAvaliacao.equals(EstadoAvaliacao.ELEGIVEL);
+    }
+
+    public void incluirCartao(Cartao cartao) {
+        this.cartao = cartao;
+        alterarEstadoCartaoParaObtido();
+    }
+
+    private void alterarEstadoCartaoParaObtido() {
+        this.estadoCartao = EstadoCartao.CARTAO_OBTIDO;
     }
 
     // Como o retorno 201 requer o ID do recurso, e isso também é solicitado pela feature,
@@ -76,15 +103,11 @@ public class Proposta {
         return documento;
     }
 
-    public String getNomeProposta(){
-        return nomeProposta;
+    public String getNome(){
+        return nome;
     }
 
     public Double getSalario() {
         return salario;
-    }
-
-    public void atualizarEstadoDaAvaliacao(AvaliacaoFinanceiraResponse response) {
-        this.estadoAvaliacao = response.getResultadoSolicitacao();
     }
 }

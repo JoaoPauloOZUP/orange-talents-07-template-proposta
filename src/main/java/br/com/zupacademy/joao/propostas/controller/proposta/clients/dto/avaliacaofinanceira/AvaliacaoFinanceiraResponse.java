@@ -1,9 +1,10 @@
-package br.com.zupacademy.joao.propostas.controller.proposta.clients.dto;
+package br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.avaliacaofinanceira;
 
 import br.com.zupacademy.joao.propostas.controller.proposta.utils.EstadoAvaliacao;
 import br.com.zupacademy.joao.propostas.controller.proposta.utils.EstadoSolicitacao;
 
 public class AvaliacaoFinanceiraResponse {
+
     private String documento;
 
     private String nome;

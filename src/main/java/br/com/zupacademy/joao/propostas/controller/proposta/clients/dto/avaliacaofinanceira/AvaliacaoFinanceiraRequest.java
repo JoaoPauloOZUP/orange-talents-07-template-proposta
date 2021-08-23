@@ -1,4 +1,4 @@
-package br.com.zupacademy.joao.propostas.controller.proposta.clients.dto;
+package br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.avaliacaofinanceira;
 
 import br.com.zupacademy.joao.propostas.model.Proposta;
 
@@ -21,7 +21,7 @@ public class AvaliacaoFinanceiraRequest {
     public AvaliacaoFinanceiraRequest(@NotNull Proposta proposta) {
 
         this.documento = proposta.getDocumento();
-        this.nome = proposta.getNomeProposta();
+        this.nome = proposta.getNome();
         this.idProposta = proposta.getId();
     }
 

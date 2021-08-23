@@ -2,8 +2,10 @@ package br.com.zupacademy.joao.propostas.controller.proposta;
 
 import br.com.zupacademy.joao.propostas.controller.proposta.clients.AvaliacaoFinaneiraClient;
 import br.com.zupacademy.joao.propostas.config.exception.ApiErroException;
-import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.AvaliacaoFinanceiraRequest;
-import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.AvaliacaoFinanceiraResponse;
+import br.com.zupacademy.joao.propostas.controller.proposta.clients.CartaoClient;
+import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.avaliacaofinanceira.AvaliacaoFinanceiraRequest;
+import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.avaliacaofinanceira.AvaliacaoFinanceiraResponse;
+import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.cartao.CartaoResponse;
 import br.com.zupacademy.joao.propostas.controller.proposta.dto.PropostaRequest;
 import br.com.zupacademy.joao.propostas.model.Proposta;
 import br.com.zupacademy.joao.propostas.repository.PropostaRepository;
@@ -13,10 +15,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.support.TransactionTemplate;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -32,17 +33,21 @@ public class PropostaController {
     private PropostaRepository repository;
 
     @Autowired
-    private AvaliacaoFinaneiraClient client;
+    private AvaliacaoFinaneiraClient clientFinanceira;
 
     @Autowired
     private TransactionTemplate transaction;
+
+    @Autowired
+    private CartaoClient clientCartao;
+
 
     @PostMapping("/proposta")
     private ResponseEntity<?> cadastrarProposta(@Valid @RequestBody PropostaRequest request, UriComponentsBuilder builder) {
         Optional<Proposta> possivelProposta = repository.findByDocumento(request.getDocumento());
 
         if(possivelProposta.isPresent()) {
-            logger.info("Proposta existente para documento={}", request.getDocumento());
+            logger.info("Proposta existente para DOCUMENTO={}", request.getDocumento());
 
             // O motivo desta mensagem é pelo o fato de não expressar que um documento está incorreto.
             // Isso poderia motiva um hacker a fazer tentativas e erros constantes!
@@ -51,13 +56,13 @@ public class PropostaController {
 
         Proposta proposta = request.toProposta();
         transaction.execute(status -> repository.save(proposta));
-        logger.info("Proposta criada: proposta={}, salario={}", proposta.getNomeProposta(), proposta.getSalario());
+        logger.info("Proposta criada: PROPOSTA={}, SALARIO={}", proposta.getId(), proposta.getSalario());
 
         try {
-            AvaliacaoFinanceiraResponse response = client.avalia(new AvaliacaoFinanceiraRequest(proposta));
+            AvaliacaoFinanceiraResponse response = clientFinanceira.avalia(new AvaliacaoFinanceiraRequest(proposta));
             proposta.atualizarEstadoDaAvaliacao(response);
         } catch (FeignException.FeignClientException exception) {
-            logger.error("Erro na comunicação com API externa. ERRO={}, STATUS={}", exception.getMessage(), exception.status());
+            logger.error("Erro na comunicação com API externa. STATUS={}, ERRO={}", exception.status(), exception.getMessage());
 
             throw new ApiErroException(HttpStatus.UNPROCESSABLE_ENTITY, "Algo deu errado. Tente novamente mais tarde");
         }
