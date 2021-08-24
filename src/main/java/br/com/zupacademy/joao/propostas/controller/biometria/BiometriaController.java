@@ -52,7 +52,7 @@ public class BiometriaController {
                 return ResponseEntity.created(uri).build();
             } catch (Exception exception) {
                 logger.error("Erro. ERRO={}, CAUSA={}", exception.getMessage(), exception.getCause().getMessage());
-                throw new ApiErroException(HttpStatus.UNPROCESSABLE_ENTITY, "Algo deu errado, tente novamente mais tarde");
+                throw new ApiErroException(HttpStatus.SERVICE_UNAVAILABLE, "Algo deu errado, tente novamente mais tarde");
             }
         }
 

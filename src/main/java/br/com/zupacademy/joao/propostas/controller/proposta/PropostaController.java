@@ -65,7 +65,7 @@ public class PropostaController {
         } catch (FeignException.FeignClientException exception) {
             logger.error("Erro na comunicação com API externa. STATUS={}, ERRO={}", exception.status(), exception.getMessage());
 
-            throw new ApiErroException(HttpStatus.UNPROCESSABLE_ENTITY, "Algo deu errado. Tente novamente mais tarde");
+            throw new ApiErroException(HttpStatus.SERVICE_UNAVAILABLE, "Algo deu errado. Tente novamente mais tarde");
         }
 
         // Na main, o contexto de transação defautlt ativado pelo o repository do JPA está desativado.
