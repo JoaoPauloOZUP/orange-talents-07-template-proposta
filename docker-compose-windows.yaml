@@ -22,6 +22,19 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
 
+  aplicacao:
+    image: 'zupacademy/proposta-joao:latest'
+    ports:
+      - 8080:8080
+    environment:
+      DB_URL: jdbc:postgresql://postgres_propostas:5432/propostas
+      DB_USER: root
+      DB_PASS: root
+      AVALIACOES_URL: http://analise:9999/api/solicitacao
+      CARTOES_URL: http://contas:8888/api/solicitacao
+    depends_on:
+      - postgres_propostas
+
   postgres_propostas:
     image: 'postgres:9.6-alpine'
     volumes:
@@ -150,3 +163,4 @@ volumes:
   prometheus-volume:
   postgres-volume:
   postgres-volume-proposta:
+  aplicacao:
