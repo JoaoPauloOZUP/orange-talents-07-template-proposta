@@ -1,6 +1,5 @@
 package br.com.zupacademy.joao.propostas.model;
 
-import br.com.zupacademy.joao.propostas.controller.bloqueio.clients.dto.BloqueioResponse;
 import br.com.zupacademy.joao.propostas.controller.bloqueio.utils.EstadoBloqueio;
 
 import javax.persistence.*;
@@ -8,6 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
+import static br.com.zupacademy.joao.propostas.controller.bloqueio.utils.EstadoBloqueio.EFETIVADO;
 
 @Entity
 public class Cartao {
@@ -63,5 +63,9 @@ public class Cartao {
 
     public String getNumeroCartao() {
         return numeroCartao;
+    }
+
+    public boolean isBloqueado() {
+        return bloqueio != null || bloqueio.getEstadoBloqueio().equals(EFETIVADO);
     }
 }

@@ -7,7 +7,8 @@ public enum EstadoSolicitacaoBloqueio {
             return EstadoBloqueio.EM_ESPERA;
         }
     },
-    BLOQUEADO {
+    BLOQUEADO
+            {
         @Override
         public EstadoBloqueio resultado() {
             return EstadoBloqueio.EFETIVADO;
