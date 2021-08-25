@@ -1,13 +1,12 @@
 package br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.cartao;
 
+import br.com.zupacademy.joao.propostas.controller.bloqueio.clients.dto.BloqueioResponse;
 import br.com.zupacademy.joao.propostas.model.*;
 import br.com.zupacademy.joao.propostas.repository.PropostaRepository;
 
-import javax.persistence.EntityManager;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CartaoResponse {
 

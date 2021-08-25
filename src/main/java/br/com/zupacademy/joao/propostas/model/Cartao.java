@@ -1,5 +1,8 @@
 package br.com.zupacademy.joao.propostas.model;
 
+import br.com.zupacademy.joao.propostas.controller.bloqueio.clients.dto.BloqueioResponse;
+import br.com.zupacademy.joao.propostas.controller.bloqueio.utils.EstadoBloqueio;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -27,6 +30,9 @@ public class Cartao {
     @OneToOne @NotNull
     private Proposta proposta;
 
+    @OneToOne(cascade = CascadeType.MERGE, mappedBy = "cartao")
+    private Bloqueio bloqueio;
+
     /**
      * @deprecated construtor padrão para o hibernate
      * */
@@ -45,5 +51,17 @@ public class Cartao {
         this.titular = titular;
         this.limite = limite;
         this.proposta = proposta;
+    }
+
+    public void bloquear(Bloqueio bloqueio) {
+        this.bloqueio = bloqueio;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getNumeroCartao() {
+        return numeroCartao;
     }
 }
