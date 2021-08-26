@@ -67,7 +67,7 @@ public class BloqueioController {
                 // Independente do que houver, sempre salvarei o cartão e o estado do bloqueio, seja em FALHA ou EM_ESPERA!
                 cartao.bloquear(bloqueio);
                 transaction.execute(status -> cartaoRepository.save(cartao));
-                logger.info("Cartão salvo. CARTAO={}, ESTADO={}", cartao.getId(), bloqueio.getEstadoBloqueio());
+                logger.info("Bloqueio salvo. CARTAO={}, ESTADO={}", cartao.getId(), bloqueio.getEstadoBloqueio());
             }
 
             // Só chegará a este ponto caso tudo ocorra certo!
