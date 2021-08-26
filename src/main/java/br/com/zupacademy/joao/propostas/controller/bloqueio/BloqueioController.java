@@ -42,18 +42,18 @@ public class BloqueioController {
 
     @PutMapping("/bloqueio/cartao/{id}")
     private ResponseEntity<?> bloquearCartao(@PathVariable("id") String numeroCartao, HttpServletRequest servletRequest) {
-        Optional<Bloqueio> possivelBloqueio = bloqueioRepository.findByCartaoNumeroCartao(numeroCartao);
-
-        if(possivelBloqueio.isPresent()) {
-            logger.error("Cartão já bloqueado. BLOQUEIO={}", possivelBloqueio.get().getId());
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Este cartão já está bloqueado");
-        }
-
         Optional<Cartao> possivelCartao = cartaoRepository.findByNumeroCartao(numeroCartao);
 
         if(possivelCartao.isPresent()) {
             Cartao cartao = possivelCartao.get();
+
+            if(cartao.isBloqueado()) {
+                logger.error("Cartão já bloqueado. CARTAO={}", cartao.getId());
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Este cartão já está bloqueado");
+            }
+
             Bloqueio bloqueio = new Bloqueio(cartao, servletRequest);
+
             try{
                 BloqueioResponse response = clientBloqueio.bloquear(numeroCartao, new SistemaResponsavelRequest("propostas"));
                 bloqueio.efetivar(response);

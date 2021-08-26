@@ -1,12 +1,13 @@
 package br.com.zupacademy.joao.propostas.model;
 
-import br.com.zupacademy.joao.propostas.controller.bloqueio.utils.EstadoBloqueio;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import static br.com.zupacademy.joao.propostas.controller.bloqueio.utils.EstadoBloqueio.EFETIVADO;
 
 @Entity
@@ -30,8 +31,8 @@ public class Cartao {
     @OneToOne @NotNull
     private Proposta proposta;
 
-    @OneToOne(cascade = CascadeType.MERGE, mappedBy = "cartao")
-    private Bloqueio bloqueio;
+    @OneToMany(cascade = CascadeType.MERGE, mappedBy = "cartao")
+    private List<Bloqueio> bloqueio = new ArrayList<>();
 
     /**
      * @deprecated construtor padrão para o hibernate
@@ -54,7 +55,7 @@ public class Cartao {
     }
 
     public void bloquear(Bloqueio bloqueio) {
-        this.bloqueio = bloqueio;
+        this.bloqueio.add(bloqueio);
     }
 
     public Long getId() {
@@ -66,6 +67,16 @@ public class Cartao {
     }
 
     public boolean isBloqueado() {
-        return bloqueio != null || bloqueio.getEstadoBloqueio().equals(EFETIVADO);
+        // Considero as solicitações. Caso não tenha nenhuma, então a lista estará vazia
+        if(bloqueio.isEmpty()) {
+            return false;
+        } else {
+            // Em uma lista de bloqueios, considero que a ultima solicitação é que vale.
+            // Para garantir isso implementei o comparTo pelo o identificador.
+            bloqueio.sort(Bloqueio::compareTo);
+            int ultimo = bloqueio.size()-1;
+            return bloqueio.get(ultimo).getEstadoBloqueio().equals(EFETIVADO);
+        }
     }
 }
+

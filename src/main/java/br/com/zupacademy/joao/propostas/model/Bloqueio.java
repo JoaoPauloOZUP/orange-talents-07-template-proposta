@@ -9,13 +9,13 @@ import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Entity
-public class Bloqueio {
+public class Bloqueio implements Comparable<Bloqueio> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne @NotNull
+    @ManyToOne @NotNull
     private Cartao cartao;
 
     private Instant bloqueadoEm = Instant.now();
@@ -57,5 +57,18 @@ public class Bloqueio {
 
     public String numeroDoCartaoBloqueado() {
         return cartao.getNumeroCartao();
+    }
+
+    @Override
+    public int compareTo(Bloqueio comparador) {
+        if(this.id < comparador.getId()) {
+            return -1;
+        }
+
+        if(this.id > comparador.getId()) {
+            return 1;
+        }
+
+        return 0;
     }
 }
