@@ -3,7 +3,6 @@ package br.com.zupacademy.joao.propostas.controller.bloqueio.service;
 import br.com.zupacademy.joao.propostas.controller.bloqueio.clients.BloqueioClient;
 import br.com.zupacademy.joao.propostas.controller.bloqueio.clients.dto.BloqueioResponse;
 import br.com.zupacademy.joao.propostas.controller.bloqueio.clients.dto.SistemaResponsavelRequest;
-import br.com.zupacademy.joao.propostas.controller.proposta.PropostaController;
 import br.com.zupacademy.joao.propostas.model.Bloqueio;
 import br.com.zupacademy.joao.propostas.repository.BloqueioRepository;
 import feign.FeignException;
@@ -23,7 +22,7 @@ import java.util.List;
 @Service
 public class BloquearCartaoQueEstaoAguardando {
 
-    private final Logger logger = LoggerFactory.getLogger(PropostaController.class);
+    private final Logger logger = LoggerFactory.getLogger(BloquearCartaoQueEstaoAguardando.class);
 
     @Autowired
     private BloqueioClient bloqueioClient;

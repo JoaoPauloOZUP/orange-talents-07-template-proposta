@@ -1,13 +1,19 @@
 package br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.cartao;
 
+import br.com.zupacademy.joao.propostas.controller.aviso_viagem.utils.EstadoAviso;
+import br.com.zupacademy.joao.propostas.controller.aviso_viagem.utils.EstadoSolicitacaoAvisoViagem;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class AvisoViagemResponse {
 
-    private String validoAte;
+    @JsonProperty("resultado")
+    private String resultado;
 
-    private String destino;
+    public AvisoViagemResponse(@JsonProperty("resultado") String resultado) {
+        this.resultado = resultado;
+    }
 
-    public AvisoViagemResponse(String validoAte, String destino) {
-        this.validoAte = validoAte;
-        this.destino = destino;
+    public EstadoAviso getResultado() {
+        return EstadoSolicitacaoAvisoViagem.valueOf(resultado).resultado();
     }
 }

@@ -10,7 +10,6 @@ import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.Date;
 
 public class AvisoViagemRequest {
 
@@ -19,8 +18,8 @@ public class AvisoViagemRequest {
 
     @NotNull
     @Future
-    @JsonFormat(pattern="dd-MM-yyyy")
-    private LocalDate dataTermino;
+    @JsonFormat(pattern="yyyy-MM-dd")
+    private LocalDate validoAte;
 
     @Deprecated
     private AvisoViagemRequest() {
@@ -28,13 +27,21 @@ public class AvisoViagemRequest {
 
     @JsonCreator
     public AvisoViagemRequest(@NotBlank String destino,
-                              @NotNull @Future LocalDate dataTermino) {
+                              @NotNull @Future LocalDate validoAte) {
 
         this.destino = destino;
-        this.dataTermino = dataTermino;
+        this.validoAte = validoAte;
     }
 
     public AvisoViagem toAvisoViagem(HttpServletRequest httpRequest, Cartao cartao) {
-        return new AvisoViagem(destino, dataTermino, httpRequest, cartao);
+        return new AvisoViagem(destino, validoAte, httpRequest, cartao);
+    }
+
+    public String getDestino() {
+        return destino;
+    }
+
+    public LocalDate getValidoAte() {
+        return validoAte;
     }
 }

@@ -1,6 +1,5 @@
 package br.com.zupacademy.joao.propostas.controller.proposta.service;
 
-import br.com.zupacademy.joao.propostas.controller.proposta.PropostaController;
 import br.com.zupacademy.joao.propostas.controller.proposta.clients.CartaoClient;
 import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.cartao.CartaoRequest;
 import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.cartao.CartaoResponse;
@@ -23,7 +22,7 @@ import java.util.List;
 @Service
 public class AtrelaCartaoNaPropostaSchedule {
 
-    private final Logger logger = LoggerFactory.getLogger(PropostaController.class);
+    private final Logger logger = LoggerFactory.getLogger(AtrelaCartaoNaPropostaSchedule.class);
 
     @Autowired
     private PropostaRepository repository;
