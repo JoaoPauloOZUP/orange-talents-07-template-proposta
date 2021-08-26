@@ -43,14 +43,15 @@ public class AtrelaCartaoNaPropostaSchedule {
                     CartaoResponse response = clientCartao.obterCartao(new CartaoRequest(proposta));
                     Cartao cartao = response.toCartao(repository);
                     proposta.incluirCartao(cartao);
-                    try {
-                        transaction.execute(status -> repository.save(proposta));
-                        logger.info("Proposta com cartão atrelado PROPOSTA={}", proposta.getId());
-                    } catch (TransactionException exception) {
-                        logger.error("Erro ao persistir. ERRO={}, CAUSA={}", exception.getMessage(), exception.getCause().getMessage());
-                    }
                 } catch (FeignException.FeignClientException exception) {
                     logger.error("Erro na comunicação com API externa. PROPOSTA={} STATUS={}, ERRO={}", proposta.getId(), exception.status(), exception.getMessage());
+                }
+
+                try {
+                    transaction.execute(status -> repository.save(proposta));
+                    logger.info("Proposta com cartão atrelado PROPOSTA={}", proposta.getId());
+                } catch (TransactionException exception) {
+                    logger.error("Erro ao persistir. ERRO={}, CAUSA={}", exception.getMessage(), exception.getCause().getMessage());
                 }
             });
         }

@@ -43,14 +43,15 @@ public class BloquearCartaoQueEstaoAguardando {
                 try {
                     BloqueioResponse response = bloqueioClient.bloquear(bloqueio.numeroDoCartaoBloqueado(), new SistemaResponsavelRequest("propostas"));
                     bloqueio.efetivar(response);
-                    try {
-                        transaction.execute(status -> bloqueioRepository.save(bloqueio));
-                        logger.info("Bloqueio efetivado BLOQUEIO={}, ESTADO={}", bloqueio.getId(), bloqueio.getEstadoBloqueio());
-                    } catch (TransactionException transactionException) {
-                        logger.error("Erro ao persistir o dado. ERRO={}, CAUSA={}", transactionException.getMessage(), transactionException.getCause().getMessage());
-                    }
                 } catch(FeignException feignException) {
                     logger.error("Erro na comunicação. ERRO={}", feignException.getMessage());
+                }
+
+                try {
+                    transaction.execute(status -> bloqueioRepository.save(bloqueio));
+                    logger.info("Bloqueio efetivado BLOQUEIO={}, ESTADO={}", bloqueio.getId(), bloqueio.getEstadoBloqueio());
+                } catch (TransactionException transactionException) {
+                    logger.error("Erro ao persistir o dado. ERRO={}, CAUSA={}", transactionException.getMessage(), transactionException.getCause().getMessage());
                 }
             });
         }
