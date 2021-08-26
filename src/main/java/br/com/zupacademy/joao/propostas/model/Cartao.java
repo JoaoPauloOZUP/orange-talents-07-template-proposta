@@ -57,20 +57,20 @@ public class Cartao {
         this.proposta = proposta;
     }
 
-    public void bloquear(Bloqueio bloqueio) {
-        this.bloqueio.add(bloqueio);
-    }
-
-    public void incluirAvisoDeViagem(AvisoViagem aviso) {
-        this.avisos.add(aviso);
-    }
-
     public Long getId() {
         return id;
     }
 
     public String getNumeroCartao() {
         return numeroCartao;
+    }
+
+    public void bloquear(Bloqueio bloqueio) {
+        this.bloqueio.add(bloqueio);
+    }
+
+    public void incluirAvisoDeViagem(AvisoViagem aviso) {
+        this.avisos.add(aviso);
     }
 
     public boolean isBloqueado() {
