@@ -34,6 +34,9 @@ public class Cartao {
     @OneToMany(cascade = CascadeType.MERGE, mappedBy = "cartao")
     private List<Bloqueio> bloqueio = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.MERGE, mappedBy = "cartao")
+    private List<AvisoViagem> avisos = new ArrayList<>();
+
     /**
      * @deprecated construtor padrão para o hibernate
      * */
@@ -56,6 +59,10 @@ public class Cartao {
 
     public void bloquear(Bloqueio bloqueio) {
         this.bloqueio.add(bloqueio);
+    }
+
+    public void incluirAvisoDeViagem(AvisoViagem aviso) {
+        this.avisos.add(aviso);
     }
 
     public Long getId() {
