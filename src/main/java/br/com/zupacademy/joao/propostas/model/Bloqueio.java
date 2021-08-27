@@ -1,7 +1,6 @@
 package br.com.zupacademy.joao.propostas.model;
 
 import br.com.zupacademy.joao.propostas.controller.bloqueio.clients.dto.BloqueioResponse;
-import br.com.zupacademy.joao.propostas.controller.bloqueio.utils.EstadoBloqueio;
 import br.com.zupacademy.joao.propostas.controller.bloqueio.utils.EstadoSolicitacaoBloqueio;
 
 import javax.persistence.*;

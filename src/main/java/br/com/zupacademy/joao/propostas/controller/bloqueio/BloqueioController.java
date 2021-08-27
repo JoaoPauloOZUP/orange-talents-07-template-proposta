@@ -58,9 +58,9 @@ public class BloqueioController {
                 BloqueioResponse response = clientBloqueio.bloquear(numeroCartao, new SistemaResponsavelRequest("propostas"));
                 bloqueio.efetivar(response);
                 logger.info("Bloqueio realizado. CARTAO={}, ESTADO={}", cartao.getId(), bloqueio.getEstadoBloqueio());
-            } catch (FeignException.FeignClientException exception) {
+            } catch (FeignException exception) {
                 // Trato a exceção caso haja algum erro e digo que o bloqueio em um estado de FALHA!
-                logger.error("Erro na comunicação com serviço externo. ERROR={}, CAUSA={}", exception.getMessage(), exception.getCause().getMessage());
+                logger.error("Erro na comunicação com serviço externo. STATUS={}", exception.status());
                 throw new ApiErroException(HttpStatus.SERVICE_UNAVAILABLE, "Aconteceu algo de errado. Seu cartão será bloqueado periódicamente");
             } finally {
                 // Independente do que houver, sempre salvarei o cartão e o estado do bloqueio, seja em FALHA.

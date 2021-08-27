@@ -1,5 +1,7 @@
 package br.com.zupacademy.joao.propostas.model;
 
+import br.com.zupacademy.joao.propostas.controller.bloqueio.utils.EstadoSolicitacaoBloqueio;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -8,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static br.com.zupacademy.joao.propostas.controller.bloqueio.utils.EstadoBloqueio.EFETIVADO;
+import static br.com.zupacademy.joao.propostas.controller.bloqueio.utils.EstadoSolicitacaoBloqueio.BLOQUEADO;
 
 @Entity
 public class Cartao {
@@ -32,7 +34,7 @@ public class Cartao {
     private Proposta proposta;
 
     @OneToMany(cascade = CascadeType.MERGE, mappedBy = "cartao")
-    private List<Bloqueio> bloqueio = new ArrayList<>();
+    private List<Bloqueio> bloqueios = new ArrayList<>();
 
     @OneToMany(mappedBy = "cartao")
     private List<AvisoViagem> avisos = new ArrayList<>();
@@ -69,7 +71,7 @@ public class Cartao {
     }
 
     public void bloquear(Bloqueio bloqueio) {
-        this.bloqueio.add(bloqueio);
+        this.bloqueios.add(bloqueio);
     }
 
     public void incluirAvisoDeViagem(AvisoViagem aviso) {
@@ -78,14 +80,14 @@ public class Cartao {
 
     public boolean isBloqueado() {
         // Considero as solicitações. Caso não tenha nenhuma, então a lista estará vazia
-        if(bloqueio.isEmpty()) {
+        if(bloqueios.isEmpty()) {
             return false;
         } else {
             // Em uma lista de bloqueios, considero que a ultima solicitação é que vale.
             // Para garantir isso implementei o comparTo pelo o identificador.
-            bloqueio.sort(Bloqueio::compareTo);
-            int ultimo = bloqueio.size()-1;
-            return bloqueio.get(ultimo).getEstadoBloqueio().equals(EFETIVADO);
+            bloqueios.sort(Bloqueio::compareTo);
+            int ultimo = bloqueios.size()-1;
+            return bloqueios.get(ultimo).getEstadoBloqueio().equals(BLOQUEADO);
         }
     }
 
