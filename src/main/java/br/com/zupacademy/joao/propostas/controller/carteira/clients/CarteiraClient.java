@@ -1,6 +1,6 @@
 package br.com.zupacademy.joao.propostas.controller.carteira.clients;
 
-import br.com.zupacademy.joao.propostas.controller.carteira.dto.CarteiraRequest;
+import br.com.zupacademy.joao.propostas.controller.carteira.dto.CarteirasDigitaisRequest;
 import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.cartao.CarteiraResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,5 +11,5 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface CarteiraClient {
 
     @PostMapping("/{id}/carteiras")
-    CarteiraResponse associar(@RequestParam("id") String numeroCartao, @RequestBody CarteiraRequest request);
+    CarteiraResponse associar(@RequestParam("id") String numeroCartao, @RequestBody CarteirasDigitaisRequest request);
 }

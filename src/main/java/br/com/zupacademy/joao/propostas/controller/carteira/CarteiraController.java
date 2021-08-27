@@ -1,7 +1,9 @@
 package br.com.zupacademy.joao.propostas.controller.carteira;
 
 import br.com.zupacademy.joao.propostas.controller.carteira.clients.CarteiraClient;
-import br.com.zupacademy.joao.propostas.controller.carteira.dto.CarteiraRequest;
+import br.com.zupacademy.joao.propostas.controller.carteira.dto.CarteiraPaypalRequest;
+import br.com.zupacademy.joao.propostas.controller.carteira.dto.CarteiraSamsungPayRequest;
+import br.com.zupacademy.joao.propostas.controller.carteira.dto.CarteirasDigitaisRequest;
 import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.cartao.CarteiraResponse;
 import br.com.zupacademy.joao.propostas.model.Cartao;
 import br.com.zupacademy.joao.propostas.model.Carteira;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.net.URI;
 import java.util.Optional;
 
@@ -43,7 +46,19 @@ public class CarteiraController {
 
     @PostMapping("/paypal/cartao/{id}")
     private ResponseEntity<?> associarCarteiraPayPal(@PathVariable("id") String numeroCartao,
-                                               @Valid @RequestBody CarteiraRequest request, UriComponentsBuilder builder) {
+                                                     @Valid @RequestBody CarteiraPaypalRequest request, UriComponentsBuilder builder) {
+
+        return associarCarteira(numeroCartao, request, builder);
+    }
+
+    @PostMapping("/samsungpay/cartao/{id}")
+    private ResponseEntity<?> associarCarteiraSamsungPay(@PathVariable("id") String numeroCartao,
+                                            @Valid @RequestBody CarteiraSamsungPayRequest request, UriComponentsBuilder builder) {
+
+        return associarCarteira(numeroCartao, request, builder);
+    }
+
+    private ResponseEntity<?> associarCarteira(@NotBlank String numeroCartao, @Valid CarteirasDigitaisRequest request, UriComponentsBuilder builder) {
         Optional<Cartao> possivelCartao = cartaoRepository.findByNumeroCartao(numeroCartao);
 
         if(possivelCartao.isPresent()) {

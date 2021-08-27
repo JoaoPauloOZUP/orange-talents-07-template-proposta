@@ -7,6 +7,12 @@ public enum CarteirasDigitais {
             return PAYPAL;
         }
     },
+    SAMSUNGPAY {
+        @Override
+        public CarteirasDigitais obterCarteira() {
+            return SAMSUNGPAY;
+        }
+    },
     ;
 
     public abstract CarteirasDigitais obterCarteira();

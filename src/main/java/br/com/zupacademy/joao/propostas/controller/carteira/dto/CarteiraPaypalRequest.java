@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-public class CarteiraRequest {
+public class CarteiraPaypalRequest implements CarteirasDigitaisRequest {
 
     @ExistEmail(domainClass = Proposta.class, fieldName = "email")
     @Email
@@ -22,12 +22,12 @@ public class CarteiraRequest {
     private String carteira;
 
     @Deprecated
-    private CarteiraRequest() {
+    private CarteiraPaypalRequest() {
 
     }
 
     @JsonCreator
-    public CarteiraRequest(String email, String carteira) {
+    public CarteiraPaypalRequest(String email, String carteira) {
         this.email = email;
         this.carteira = carteira.toUpperCase();
     }
