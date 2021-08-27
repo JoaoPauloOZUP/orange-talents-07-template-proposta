@@ -34,7 +34,7 @@ public class AtrelarCartaoNaProposta {
     private TransactionTemplate transaction;
 
     @Scheduled(fixedDelay = 5000)
-    private void atrelarCartaoComProposta() {
+    protected void atrelarCartaoComProposta() {
         List<Proposta> possiveisPropostas = repository.findByEstadoCartao(AGUARDANDO_CARTAO.name());
 
         if(possiveisPropostas.size() != 0) {

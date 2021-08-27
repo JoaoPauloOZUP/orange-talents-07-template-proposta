@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import static br.com.zupacademy.joao.propostas.controller.bloqueio.utils.EstadoBloqueio.EM_ESPERA;
 import static br.com.zupacademy.joao.propostas.controller.bloqueio.utils.EstadoBloqueio.FALHA;
 
 import java.util.List;
@@ -34,7 +33,7 @@ public class BloquearCartaoQueEstaoEmFalha {
     private TransactionTemplate transaction;
 
     @Scheduled(fixedDelay = 60000)
-    private void bloquearCartoesEmEspera() {
+    protected void bloquearCartoesEmEspera() {
         // Tudo bem, tratei os erros e aqui sempre busco um bloqueio não efetivado com estado de FALHA ou EM_ESPERA
         List<Bloqueio> possiveisBloqueiosEmEspera = bloqueioRepository.findByEstadoBloqueio(FALHA.name());
 
