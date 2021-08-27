@@ -1,19 +1,22 @@
 package br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.cartao;
 
+import br.com.zupacademy.joao.propostas.controller.carteira.utils.EstadoSolicitacaoCarteira;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class CarteiraResponse {
 
+    @JsonProperty("resultado")
+    private String resultado;
+
+    @JsonProperty("id")
     private String id;
 
-    private String email;
-
-    private String associadoEm;
-
-    private String emissor;
-
-    public CarteiraResponse(String id, String email, String associadoEm, String emissor) {
+    public CarteiraResponse(String resultado, String id) {
+        this.resultado = resultado;
         this.id = id;
-        this.email = email;
-        this.associadoEm = associadoEm;
-        this.emissor = emissor;
+    }
+
+    public boolean associacaoConcluida() {
+        return EstadoSolicitacaoCarteira.valueOf(resultado).resultado();
     }
 }

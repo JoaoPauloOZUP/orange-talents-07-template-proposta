@@ -37,6 +37,9 @@ public class Cartao {
     @OneToMany(cascade = CascadeType.MERGE, mappedBy = "cartao")
     private List<AvisoViagem> avisos = new ArrayList<>();
 
+    @OneToOne(mappedBy = "cartao")
+    private Carteira carteira;
+
     /**
      * @deprecated construtor padrão para o hibernate
      * */
@@ -84,6 +87,10 @@ public class Cartao {
             int ultimo = bloqueio.size()-1;
             return bloqueio.get(ultimo).getEstadoBloqueio().equals(EFETIVADO);
         }
+    }
+
+    public boolean isAssociado() {
+        return carteira != null;
     }
 }
 
