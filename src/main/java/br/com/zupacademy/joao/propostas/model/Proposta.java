@@ -98,6 +98,10 @@ public class Proposta {
         return id;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
     public String getDocumento() {
         return documento;
     }

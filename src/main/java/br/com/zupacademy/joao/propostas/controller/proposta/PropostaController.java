@@ -10,9 +10,11 @@ import br.com.zupacademy.joao.propostas.controller.proposta.dto.PropostaResponse
 import br.com.zupacademy.joao.propostas.model.Proposta;
 import br.com.zupacademy.joao.propostas.repository.PropostaRepository;
 import feign.FeignException;
+import io.opentracing.Span;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -40,9 +42,9 @@ public class PropostaController {
     @Autowired
     private CartaoClient clientCartao;
 
-
     @PostMapping("/proposta")
     private ResponseEntity<?> cadastrarProposta(@Valid @RequestBody PropostaRequest request, UriComponentsBuilder builder) {
+
         Optional<Proposta> possivelProposta = repository.findByDocumento(request.getDocumento());
 
         if(possivelProposta.isPresent()) {
