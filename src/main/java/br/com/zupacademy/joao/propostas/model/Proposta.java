@@ -1,8 +1,7 @@
 package br.com.zupacademy.joao.propostas.model;
 
 import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.avaliacaofinanceira.AvaliacaoFinanceiraResponse;
-import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.cartao.CartaoResponse;
-import br.com.zupacademy.joao.propostas.controller.proposta.utils.EstadoAvaliacao;
+import br.com.zupacademy.joao.propostas.controller.proposta.utils.EstadoAvaliacaoDaProposta;
 import br.com.zupacademy.joao.propostas.controller.proposta.utils.EstadoCartao;
 import br.com.zupacademy.joao.propostas.validator.documento.CPFOuCNPJ;
 
@@ -45,7 +44,7 @@ public class Proposta {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private EstadoAvaliacao estadoAvaliacao = EstadoAvaliacao.NAO_ELEGIVEL;
+    private EstadoAvaliacaoDaProposta estadoAvaliacaoDaProposta = EstadoAvaliacaoDaProposta.NAO_ELEGIVEL;
 
     @Enumerated(EnumType.STRING)
     private EstadoCartao estadoCartao;
@@ -73,7 +72,7 @@ public class Proposta {
     }
 
     public void atualizarEstadoDaAvaliacao(AvaliacaoFinanceiraResponse response) {
-        this.estadoAvaliacao = response.getResultadoSolicitacao();
+        this.estadoAvaliacaoDaProposta = response.getResultadoSolicitacao();
 
         if(isElegivel()) {
             this.estadoCartao = EstadoCartao.AGUARDANDO_CARTAO;
@@ -81,7 +80,7 @@ public class Proposta {
     }
 
     public boolean isElegivel() {
-        return estadoAvaliacao.equals(EstadoAvaliacao.ELEGIVEL);
+        return estadoAvaliacaoDaProposta.equals(EstadoAvaliacaoDaProposta.ELEGIVEL);
     }
 
     public void incluirCartao(Cartao cartao) {
@@ -111,7 +110,7 @@ public class Proposta {
         return salario;
     }
 
-    public EstadoAvaliacao getEstadoAvaliacao() {
-        return estadoAvaliacao;
+    public EstadoAvaliacaoDaProposta getEstadoAvaliacao() {
+        return estadoAvaliacaoDaProposta;
     }
 }

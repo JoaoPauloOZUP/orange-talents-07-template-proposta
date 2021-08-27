@@ -34,7 +34,7 @@ public class Cartao {
     @OneToMany(cascade = CascadeType.MERGE, mappedBy = "cartao")
     private List<Bloqueio> bloqueio = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.MERGE, mappedBy = "cartao")
+    @OneToMany(mappedBy = "cartao")
     private List<AvisoViagem> avisos = new ArrayList<>();
 
     @OneToOne(mappedBy = "cartao")

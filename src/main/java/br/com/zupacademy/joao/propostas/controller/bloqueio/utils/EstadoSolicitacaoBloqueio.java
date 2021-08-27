@@ -3,18 +3,18 @@ package br.com.zupacademy.joao.propostas.controller.bloqueio.utils;
 public enum EstadoSolicitacaoBloqueio {
     FALHA {
         @Override
-        public EstadoBloqueio resultado() {
-            return EstadoBloqueio.EM_ESPERA;
+        public EstadoSolicitacaoBloqueio resultado() {
+            return FALHA;
         }
     },
     BLOQUEADO
             {
         @Override
-        public EstadoBloqueio resultado() {
-            return EstadoBloqueio.EFETIVADO;
+        public EstadoSolicitacaoBloqueio resultado() {
+            return BLOQUEADO;
         }
     },
     ;
 
-    public abstract EstadoBloqueio resultado();
+    public abstract EstadoSolicitacaoBloqueio resultado();
 }

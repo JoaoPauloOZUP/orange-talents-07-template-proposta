@@ -13,7 +13,7 @@ public class BloqueioResponse {
         this.resultado = resultado;
     }
 
-    public EstadoBloqueio getEstadoDoBloqueio() {
+    public EstadoSolicitacaoBloqueio getEstadoDoBloqueio() {
         return EstadoSolicitacaoBloqueio.valueOf(resultado).resultado();
     }
 }

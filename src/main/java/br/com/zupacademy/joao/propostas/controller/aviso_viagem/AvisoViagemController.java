@@ -5,6 +5,7 @@ import br.com.zupacademy.joao.propostas.controller.aviso_viagem.dto.AvisoViagemR
 import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.cartao.AvisoViagemResponse;
 import br.com.zupacademy.joao.propostas.model.AvisoViagem;
 import br.com.zupacademy.joao.propostas.model.Cartao;
+import br.com.zupacademy.joao.propostas.repository.AvisoViagemRepository;
 import br.com.zupacademy.joao.propostas.repository.CartaoRepository;
 import feign.FeignException;
 import org.slf4j.Logger;
@@ -32,6 +33,9 @@ public class AvisoViagemController {
     private CartaoRepository cartaoRepository;
 
     @Autowired
+    private AvisoViagemRepository avisoViagemRepository;
+
+    @Autowired
     private TransactionTemplate transaction;
 
     @Autowired
@@ -54,8 +58,7 @@ public class AvisoViagemController {
             }
 
             try {
-                cartao.incluirAvisoDeViagem(aviso);
-                transaction.execute(status -> cartaoRepository.save(cartao));
+                transaction.execute(status -> avisoViagemRepository.save(aviso));
                 logger.info("Aviso atualizado. ESTADO={}", aviso.getEstadoAviso());
             } catch (TransactionException transactionException) {
                 logger.error("Erro ao persistir. AVISO={}, ESTADO={}", aviso.getId(), aviso.getEstadoAviso());

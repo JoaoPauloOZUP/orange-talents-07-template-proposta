@@ -20,9 +20,9 @@ import static br.com.zupacademy.joao.propostas.controller.bloqueio.utils.EstadoB
 import java.util.List;
 
 @Service
-public class BloquearCartaoQueEstaoAguardando {
+public class BloquearCartaoQueEstaoEmFalha {
 
-    private final Logger logger = LoggerFactory.getLogger(BloquearCartaoQueEstaoAguardando.class);
+    private final Logger logger = LoggerFactory.getLogger(BloquearCartaoQueEstaoEmFalha.class);
 
     @Autowired
     private BloqueioClient bloqueioClient;
@@ -36,7 +36,7 @@ public class BloquearCartaoQueEstaoAguardando {
     @Scheduled(fixedDelay = 60000)
     private void bloquearCartoesEmEspera() {
         // Tudo bem, tratei os erros e aqui sempre busco um bloqueio não efetivado com estado de FALHA ou EM_ESPERA
-        List<Bloqueio> possiveisBloqueiosEmEspera = bloqueioRepository.findByEstadoBloqueio(FALHA.name(), EM_ESPERA.name());
+        List<Bloqueio> possiveisBloqueiosEmEspera = bloqueioRepository.findByEstadoBloqueio(FALHA.name());
 
         if(possiveisBloqueiosEmEspera.size() != 0) {
             possiveisBloqueiosEmEspera.forEach(bloqueio -> {

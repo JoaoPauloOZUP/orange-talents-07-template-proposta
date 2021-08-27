@@ -2,6 +2,7 @@ package br.com.zupacademy.joao.propostas.model;
 
 import br.com.zupacademy.joao.propostas.controller.bloqueio.clients.dto.BloqueioResponse;
 import br.com.zupacademy.joao.propostas.controller.bloqueio.utils.EstadoBloqueio;
+import br.com.zupacademy.joao.propostas.controller.bloqueio.utils.EstadoSolicitacaoBloqueio;
 
 import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +26,7 @@ public class Bloqueio implements Comparable<Bloqueio> {
     private String userAgent;
 
     @Enumerated(EnumType.STRING)
-    private EstadoBloqueio estadoBloqueio;
+    private EstadoSolicitacaoBloqueio estadoBloqueio;
 
     /**
      * @deprecated construtor padrão para o hibernate
@@ -43,16 +44,12 @@ public class Bloqueio implements Comparable<Bloqueio> {
         return id;
     }
 
-    public EstadoBloqueio getEstadoBloqueio() {
+    public EstadoSolicitacaoBloqueio getEstadoBloqueio() {
         return estadoBloqueio;
     }
 
     public void efetivar(BloqueioResponse response) {
         this.estadoBloqueio = response.getEstadoDoBloqueio();
-    }
-
-    public void emEspera() {
-        this.estadoBloqueio = EstadoBloqueio.EM_ESPERA;
     }
 
     public String numeroDoCartaoBloqueado() {

@@ -1,7 +1,7 @@
 package br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.avaliacaofinanceira;
 
-import br.com.zupacademy.joao.propostas.controller.proposta.utils.EstadoAvaliacao;
-import br.com.zupacademy.joao.propostas.controller.proposta.utils.EstadoSolicitacao;
+import br.com.zupacademy.joao.propostas.controller.proposta.utils.EstadoAvaliacaoDaProposta;
+import br.com.zupacademy.joao.propostas.controller.proposta.utils.EstadoSolicitacaoDaProposta;
 
 public class AvaliacaoFinanceiraResponse {
 
@@ -23,7 +23,7 @@ public class AvaliacaoFinanceiraResponse {
         this.idProposta = idProposta;
     }
 
-    public EstadoAvaliacao getResultadoSolicitacao() {
-        return EstadoSolicitacao.valueOf(resultadoSolicitacao).resultado();
+    public EstadoAvaliacaoDaProposta getResultadoSolicitacao() {
+        return EstadoSolicitacaoDaProposta.valueOf(resultadoSolicitacao).resultado();
     }
 }

@@ -76,7 +76,7 @@ public class PropostaController {
     }
 
     @GetMapping("proposta/{id}")
-    public ResponseEntity<?> obterProposta(@PathVariable("id") Long idProposta) {
+    private ResponseEntity<?> obterProposta(@PathVariable("id") Long idProposta) {
         Optional<Proposta> possivelProposta = repository.findById(idProposta);
 
         if(possivelProposta.isPresent()) {

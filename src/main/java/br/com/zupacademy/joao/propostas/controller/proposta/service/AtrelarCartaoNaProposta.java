@@ -20,9 +20,9 @@ import static br.com.zupacademy.joao.propostas.controller.proposta.utils.EstadoC
 import java.util.List;
 
 @Service
-public class AtrelaCartaoNaPropostaSchedule {
+public class AtrelarCartaoNaProposta {
 
-    private final Logger logger = LoggerFactory.getLogger(AtrelaCartaoNaPropostaSchedule.class);
+    private final Logger logger = LoggerFactory.getLogger(AtrelarCartaoNaProposta.class);
 
     @Autowired
     private PropostaRepository repository;
