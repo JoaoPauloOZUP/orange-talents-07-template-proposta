@@ -1,14 +1,22 @@
 package br.com.zupacademy.joao.propostas.controller.proposta.dto;
 
+import br.com.zupacademy.joao.propostas.controller.proposta.utils.DocumentoEncode;
 import br.com.zupacademy.joao.propostas.model.Endereco;
 import br.com.zupacademy.joao.propostas.model.Proposta;
 import br.com.zupacademy.joao.propostas.validator.documento.CPFOuCNPJ;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.validation.constraints.*;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 
 public class PropostaRequest {
 
-    @NotNull @CPFOuCNPJ
+    @NotNull @CPFOuCNPJ @NotBlank
     private String documento;
 
     @NotBlank
@@ -39,8 +47,10 @@ public class PropostaRequest {
         this.salario = salario;
     }
 
-    public Proposta toProposta() {
-        return new Proposta(documento, email, nome, new Endereco(rua, numero,  bairro), salario);
+    public Proposta toProposta() throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+        DocumentoEncode documentoEncode = new DocumentoEncode();
+        String documentoEncript = documentoEncode.encodar(documento);
+        return new Proposta(documentoEncript, email, nome, new Endereco(rua, numero,  bairro), salario);
     }
 
     public String getDocumento() {

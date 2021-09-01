@@ -1,9 +1,9 @@
 package br.com.zupacademy.joao.propostas.model;
 
 import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.avaliacaofinanceira.AvaliacaoFinanceiraResponse;
+import br.com.zupacademy.joao.propostas.controller.proposta.utils.DocumentoEncode;
 import br.com.zupacademy.joao.propostas.controller.proposta.utils.EstadoAvaliacaoDaProposta;
 import br.com.zupacademy.joao.propostas.controller.proposta.utils.EstadoCartao;
-import br.com.zupacademy.joao.propostas.validator.documento.CPFOuCNPJ;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -14,7 +14,8 @@ public class Proposta {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull @CPFOuCNPJ
+    @NotNull
+    @NotBlank
     @Column(unique = true)
     private String documento;
 
@@ -58,7 +59,7 @@ public class Proposta {
     @Deprecated
     private Proposta() {}
 
-    public Proposta(@NotNull String documento,
+    public Proposta(@NotNull @NotBlank String documento,
                     @NotBlank @Email String email,
                     @NotBlank String nome,
                     @NotNull Endereco edereco,

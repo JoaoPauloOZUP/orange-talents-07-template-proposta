@@ -7,14 +7,13 @@ import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.avaliaca
 import br.com.zupacademy.joao.propostas.controller.proposta.clients.dto.avaliacaofinanceira.AvaliacaoFinanceiraResponse;
 import br.com.zupacademy.joao.propostas.controller.proposta.dto.PropostaRequest;
 import br.com.zupacademy.joao.propostas.controller.proposta.dto.PropostaResponse;
+import br.com.zupacademy.joao.propostas.controller.proposta.utils.DocumentoEncode;
 import br.com.zupacademy.joao.propostas.model.Proposta;
 import br.com.zupacademy.joao.propostas.repository.PropostaRepository;
 import feign.FeignException;
-import io.opentracing.Span;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -45,7 +44,7 @@ public class PropostaController {
     @PostMapping("/proposta")
     private ResponseEntity<?> cadastrarProposta(@Valid @RequestBody PropostaRequest request, UriComponentsBuilder builder) {
 
-        Optional<Proposta> possivelProposta = repository.findByDocumento(request.getDocumento());
+        Optional<Proposta> possivelProposta = consultaProposta(request, repository);
 
         if(possivelProposta.isPresent()) {
             logger.info("Proposta existente para DOCUMENTO={}", request.getDocumento());
@@ -55,7 +54,13 @@ public class PropostaController {
             throw new ApiErroException(HttpStatus.UNPROCESSABLE_ENTITY, "Proposta não cadastrada");
         }
 
-        Proposta proposta = request.toProposta();
+
+        Optional<Proposta> propostaProtegida = protegendoProposta(request);
+        if(propostaProtegida.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Aconteceu um erro inesperado. Tente mais tarde");
+        }
+
+        Proposta proposta = propostaProtegida.get();
         transaction.execute(status -> repository.save(proposta));
         logger.info("Proposta criada: PROPOSTA={}, SALARIO={}", proposta.getId(), proposta.getSalario());
 
@@ -86,5 +91,26 @@ public class PropostaController {
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    private Optional<Proposta> consultaProposta(PropostaRequest request, PropostaRepository repository) {
+        try {
+            DocumentoEncode documentoEncode = new  DocumentoEncode();
+            String documentoEcript = documentoEncode.encodar(request.getDocumento());
+            return repository.findByDocumento(documentoEcript);
+        } catch (Exception exception) {
+            logger.error("Erro ao encriptar documento. ERRO={}", exception.getMessage());
+            throw new ApiErroException(HttpStatus.SERVICE_UNAVAILABLE, "Erro inesperado aconteceu. Tente mais tarde");
+        }
+    }
+
+    private Optional<Proposta> protegendoProposta(PropostaRequest request) {
+        try {
+            Proposta proposta = request.toProposta();
+            return Optional.of(proposta);
+        } catch (Exception exception) {
+            logger.error("Erro ao encriptar documento. ERRO={}", exception.getMessage());
+            return Optional.empty();
+        }
     }
 }
